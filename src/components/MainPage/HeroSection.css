@@ -1,0 +1,6 @@
+.landing-page {
+	background-image: require('./balb.png');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
