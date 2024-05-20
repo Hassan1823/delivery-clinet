@@ -14,7 +14,7 @@ const schema = yup.object().shape({
   quantity: yup.string().required("Quantity is required"),
   weight: yup.string().required("Weight is required"),
 });
-export const AddProduct = ({ refresh }) => {
+export const AddProduct = ({ refresh, setLoading }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -33,7 +33,13 @@ export const AddProduct = ({ refresh }) => {
     resolver: yupResolver(schema),
   });
   const onSubmit = async (data) => {
-    const { price, quantity, weight } = data;
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    const userId = user ? user?._id : "";
+    console.log("userID is ::", userId || "no userId");
+
+    let { name, price, category, quantity, weight } = data;
+    console.log("Data is ::", data);
 
     // they must not be negetive
     if (price < 0 || quantity < 0 || weight < 0) {
@@ -41,30 +47,42 @@ export const AddProduct = ({ refresh }) => {
       return;
     }
     try {
+      setLoading(true);
+
       const response = await fetch(`${backendLink}/api/product/createproduct`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          name,
+          price,
+          category,
+          quantity,
+          weight,
+          userId,
+        }),
       });
       if (response.ok) {
         console.log("Product added successful");
         const product = await response.json();
         console.log("Product:", product);
-        toast.success("Product added successful");
+        toast.success(product.message || "Product added successful");
         refresh();
 
         reset();
-        closeModal();
       } else {
         console.error("failed failed");
 
         toast.error("Addition failed");
       }
+      setLoading(false);
       // Reset the form after successful submission (optional)
+      closeModal();
     } catch (error) {
+      setLoading(false);
       console.error("Error during product addition:", error);
+      closeModal();
     }
   };
   return (

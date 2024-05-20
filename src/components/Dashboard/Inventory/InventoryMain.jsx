@@ -10,6 +10,7 @@ import * as yup from "yup";
 import toast from "react-hot-toast";
 import { Hourglass } from "react-loader-spinner";
 import { backendLink } from "../../../../lib/data";
+
 const schema = yup.object().shape({
   name: yup.string().required("Product Name is required"),
   price: yup.number().required("Price is required"),
@@ -20,28 +21,43 @@ const schema = yup.object().shape({
 });
 export const InventoryMain = () => {
   const [products, setProducts] = useState([]);
+  const [currentProducts, setCurrentProducts] = useState([]);
   const [updateProductID, setUpdateProductID] = useState("");
   const [loading, setLoading] = useState(false);
+
+  //* fetch products
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${backendLink}/api/product/getproducts`);
-      if (response.ok) {
-        const products = await response.json();
-        // console.log(products);
-        setProducts(products);
-        setLoading(false);
+      const user = JSON.parse(localStorage.getItem("user"));
+      // console.log(user ? user : "no user");
+
+      if (user) {
+        const response = await fetch(
+          `${backendLink}/api/product/getproducts/${user?._id}`
+        );
+        if (response.ok) {
+          const products = await response.json();
+          // console.log(products);
+          setProducts(products.data || []);
+        }
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error during product addition:", error);
     }
   };
 
+  // * delete products
   const onDelete = (id) => {
     Modal.confirm({
       title: "Are you sure you want to delete?",
       onOk: () => {
-        fetch(`${backendLink}/api/product/deleteproduct/${id}`, {
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        const userId = user ? user?._id : "";
+        fetch(`${backendLink}/api/product/deleteproduct/${id}/${userId}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -76,6 +92,7 @@ export const InventoryMain = () => {
     fetchProducts();
   }, [updateProductID]);
 
+  // * download CSV
   const downloadCSV = () => {
     const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
     const fileName = `products_${currentDate}.csv`; // Add date to the file name
@@ -109,8 +126,16 @@ export const InventoryMain = () => {
     resolver: yupResolver(schema),
   });
 
+  console.log(currentProducts ? currentProducts : "no currentProducts");
+
+  // * update product
   const onSubmit = async (data) => {
+    event.preventDefault();
+    console.log("data :::", data);
     try {
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      const userId = user ? user?._id : "";
       const response = await fetch(
         `${backendLink}/api/product/updateproduct/${updateProductID}`,
         {
@@ -118,7 +143,14 @@ export const InventoryMain = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            name: data.name,
+            price: data.price,
+            category: data.category,
+            quantity: data.quantity,
+            weight: data.weight,
+            userId: userId,
+          }),
         }
       );
       if (response.ok) {
@@ -157,7 +189,7 @@ export const InventoryMain = () => {
             >
               Download CSV
             </button>
-            <AddProduct refresh={fetchProducts} />
+            <AddProduct refresh={fetchProducts} setLoading={setLoading} />
           </div>
           <div className="flex bg-inherit bg-slate-50">
             <input
@@ -197,7 +229,7 @@ export const InventoryMain = () => {
                 <tbody>
                   {/* rows */}
                   {/* check if have product  otherwise show no product */}
-                  {products.length === 0 ? (
+                  {!products || products.length === 0 ? (
                     <div className="flex justify-center w-full text-xl font-semibold">
                       No Product found
                     </div>
@@ -222,9 +254,10 @@ export const InventoryMain = () => {
                             <td>
                               <div className="flex gap-3">
                                 <button
-                                  className="px-4 py-2 shadow-2xl  rounded-xl"
+                                  className="px-4 py-2 shadow-2xl rounded-xl"
                                   onClick={() => {
                                     setUpdateProductID(product?._id);
+                                    setCurrentProducts(product);
                                     document
                                       .getElementById("updateproduct")
                                       .showModal();
@@ -233,7 +266,7 @@ export const InventoryMain = () => {
                                   <FaEdit className="text-2xl text-yellow-600" />
                                 </button>
                                 <button
-                                  className="px-4 py-2 shadow-2xl  rounded-xl"
+                                  className="px-4 py-2 shadow-2xl rounded-xl"
                                   onClick={() => {
                                     onDelete(product?._id);
                                   }}
@@ -284,6 +317,7 @@ export const InventoryMain = () => {
                   className={`border-2 rounded-lg py-2 px-3  bg-white w-3/4 ${
                     errors.name ? "input-error" : ""
                   }`}
+                  placeholder={currentProducts?.name || ""}
                   {...register("name")}
                 />
               </div>
@@ -300,6 +334,7 @@ export const InventoryMain = () => {
                   className={`border-2 rounded-lg py-2 px-3  bg-white w-3/4 ${
                     errors.price ? "input-error" : ""
                   }`}
+                  placeholder={currentProducts?.price || 0}
                   {...register("price")}
                 />
               </div>
@@ -320,6 +355,7 @@ export const InventoryMain = () => {
                   className={`border-2 rounded-lg py-2 px-3 w-3/4  bg-white  ${
                     errors.category ? "input-error" : ""
                   }`}
+                  placeholder={currentProducts?.category || ""}
                   {...register("category")}
                 />
               </div>
@@ -339,6 +375,7 @@ export const InventoryMain = () => {
                   className={`border-2 rounded-lg py-2 px-3  bg-white w-3/4 ${
                     errors.quantity ? "input-error" : ""
                   }`}
+                  placeholder={currentProducts?.quantity || 0}
                   {...register("quantity")}
                 />
               </div>
@@ -358,6 +395,7 @@ export const InventoryMain = () => {
                   className={`border-2 rounded-lg py-2 px-3  bg-white w-3/4 ${
                     errors.weight ? "input-error" : ""
                   }`}
+                  placeholder={currentProducts?.weight || 0}
                   {...register("weight")}
                 />
               </div>
