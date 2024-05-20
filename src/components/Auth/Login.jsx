@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAuthContext } from "../../context/AuthContext";
 import toast from "react-hot-toast";
+import { backendLink } from "../../../lib/data";
 
 const schema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -24,7 +25,7 @@ export const Login = () => {
   });
   const onSubmit = async (data) => {
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(`${backendLink}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,6 +42,9 @@ export const Login = () => {
           setIsLogged(true);
           toast.success("Login successful");
           navigate("/dashboard");
+        } else if (user.status === "admin unverified") {
+          toast.success("Please Wait Until Admin Approval");
+          navigate("/");
         } else {
           toast.error("Please verify your email");
           navigate("/confirmotp");
@@ -58,9 +62,9 @@ export const Login = () => {
   return (
     <>
       <div className="hero min-h-screen bg-[#E5E5E5]">
-        <div className="hero-content flex-col lg:flex-row-reverse">
-          <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-            <div className="flex justify-center items-center text-2xl font-bold gradient-text pt-2">
+        <div className="flex-col hero-content lg:flex-row-reverse">
+          <div className="w-full max-w-sm shadow-2xl card shrink-0 bg-base-100">
+            <div className="flex items-center justify-center pt-2 text-2xl font-bold gradient-text">
               log in
             </div>
             <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
@@ -96,7 +100,10 @@ export const Login = () => {
                   <p className="text-error">{errors.password.message}</p>
                 )}
                 <label className="label">
-                  <Link to="/forgot-password" className="label-text-alt link link-hover">
+                  <Link
+                    to="/forgot-password"
+                    className="label-text-alt link link-hover"
+                  >
                     Forgot password?
                   </Link>
                 </label>
@@ -106,7 +113,7 @@ export const Login = () => {
                   </Link>
                 </label>
               </div>
-              <div className="form-control mt-6">
+              <div className="mt-6 form-control">
                 <button type="submit" className="btn btn-primary">
                   Login
                 </button>

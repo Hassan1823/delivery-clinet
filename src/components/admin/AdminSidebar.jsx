@@ -1,3 +1,4 @@
+// * imports
 import React, { useEffect, useState } from "react";
 import { MdDashboard, MdLogout } from "react-icons/md";
 import { FaArrowRight, FaShippingFast } from "react-icons/fa";
@@ -6,12 +7,14 @@ import { MdOutlineInventory2, MdBorderColor } from "react-icons/md";
 import { FaPersonRays } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { DashboardMain } from "./main/DashboardMain";
-import { InventoryMain } from "./Inventory/InventoryMain";
-import { CustomersMain } from "./Customers/CustomersMain";
-import { Shipping } from "./Shipping/Shipping";
+import { DashboardMain } from "../Dashboard/main/DashboardMain";
+import { InventoryMain } from "../Dashboard/Inventory/InventoryMain";
+import { CustomersMain } from "../Dashboard/Customers/CustomersMain";
+import { Settings } from "../Dashboard/settings/Settings";
+import { Shipping } from "../Dashboard/Shipping/Shipping";
 import { useAuthContext } from "../../context/AuthContext";
-import { Settings } from "./settings/Settings";
+
+// * local imports
 
 const variants = {
   expanded: {
@@ -47,7 +50,7 @@ const navItems = [
   },
 ];
 
-function Sidebar() {
+const AdminSidebar = () => {
   const [activeNavIndex, setActiveNavIndex] = useState(0);
   const [IsExpanded, setIsExpanded] = useState(false);
   const { logoutHandler } = useAuthContext();
@@ -215,6 +218,6 @@ function Sidebar() {
       </div>
     </>
   );
-}
+};
 
-export default Sidebar;
+export default AdminSidebar;

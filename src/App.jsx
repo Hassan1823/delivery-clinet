@@ -13,6 +13,7 @@ import { DetailOrder } from "./components/TrackOrder/DetailOrder";
 import { OTP } from "./components/Auth/OTP";
 import Forgetpass from "./pages/ForgotPassword/Forgetpass";
 import ResetPasswordPage from "./pages/ForgotPassword/Resetpass";
+import AdminComp from "./pages/Admin/AdminComp";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
 
           <Route path="/signup" element={<Signuppage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          {/* <Route path="/admin" element={<AdminComp />} /> */}
           <Route path="/aboutus" element={<AboutUSPage />} />
           <Route path="/contactus" element={<ContactUSPage />} />
           <Route path="/features" element={<FeaturesPages />} />
@@ -33,7 +35,10 @@ function App() {
 
           <Route path="/confirmotp" element={<OTP />} />
           <Route path="/forgot-password" element={<Forgetpass />} />
-          <Route path="/resetPassword/:resetToken" element={<ResetPasswordPage />} />
+          <Route
+            path="/resetPassword/:resetToken"
+            element={<ResetPasswordPage />}
+          />
         </Routes>
       </BrowserRouter>
     </>
