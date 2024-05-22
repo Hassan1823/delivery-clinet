@@ -80,7 +80,7 @@ function Sidebar() {
 
   return (
     <>
-      <div className="flex center bg-[#E5E5E5]">
+      <div className="w-full flex center bg-[#E5E5E5]">
         <div>
           <motion.section
             animate={IsExpanded ? "expanded" : "nonExpanded"}

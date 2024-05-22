@@ -126,7 +126,7 @@ export const InventoryMain = () => {
     resolver: yupResolver(schema),
   });
 
-  console.log(currentProducts ? currentProducts : "no currentProducts");
+  // console.log(currentProducts ? currentProducts : "no currentProducts");
 
   // * update product
   const onSubmit = async (data) => {
@@ -296,6 +296,8 @@ export const InventoryMain = () => {
             </div>
           )}
         </div>
+
+        {/* updating product starts here */}
         <dialog id="updateproduct" className="modal">
           <div className="modal-box w-11/12 max-w-5xl bg-[#E5E5E5]">
             <h3 className="text-lg font-bold">Update product Form</h3>

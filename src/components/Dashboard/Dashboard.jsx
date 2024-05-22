@@ -1,10 +1,10 @@
-import React from 'react';
-import Sidebar from './Sidebar';
+import React from "react";
+import Sidebar from "./Sidebar";
 
 export const Dashboard = () => {
-	return (
-		<>
-			<Sidebar />
-		</>
-	);
+  return (
+    <>
+      <Sidebar />
+    </>
+  );
 };
