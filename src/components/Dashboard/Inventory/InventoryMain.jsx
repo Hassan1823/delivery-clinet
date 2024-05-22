@@ -189,7 +189,11 @@ export const InventoryMain = () => {
             >
               Download CSV
             </button>
-            <AddProduct refresh={fetchProducts} setLoading={setLoading} />
+            <AddProduct
+              refresh={fetchProducts}
+              setLoading={setLoading}
+              loading={loading}
+            />
           </div>
           <div className="flex bg-inherit bg-slate-50">
             <input

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import { FaShippingFast, FaEdit } from 'react-icons/fa';
 // import { MdOutlineDeleteSweep } from 'react-icons/md';
 // import { IoMdAddCircleOutline } from 'react-icons/io';
-import { AddShipping } from "./AddShipping";
 import { FloatButton } from "antd";
-import { jsPDF } from "jspdf";
 import JsBarcode from "jsbarcode";
+import { jsPDF } from "jspdf";
 import QRCode from "qrcode";
-import { Link } from "react-router-dom";
 import { Hourglass } from "react-loader-spinner";
+import { Link } from "react-router-dom";
 import { backendLink } from "../../../../lib/data";
+import { AddShipping } from "./AddShipping";
 
 export const Shipping = () => {
   const [shippings, setShippings] = useState([]);
@@ -38,8 +38,8 @@ export const Shipping = () => {
   const generateChallanPDF = (data) => {
     console.log(data);
     const doc = new jsPDF("landscape");
-    const currentTime = new Date().toLocaleString();
-    const unixtime = new Date().getTime();
+    // const currentTime = new Date().toLocaleString();
+    // const unixtime = new Date().getTime();
 
     // Create a label to print out the shipping detail in the center of the page with a border
     doc.text("Shipping Label", 105, 10, { align: "center" });
@@ -94,7 +94,7 @@ export const Shipping = () => {
       doc.save(`shipping-${data._id}.pdf`);
     });
 
-    doc.save(`shipping-${data._id}.pdf`);
+    // doc.save(`shipping-${data._id}.pdf`);
   };
 
   // add download csv function
