@@ -1,18 +1,18 @@
 // * imports
-import React, { useEffect, useState } from "react";
-import { MdDashboard, MdLogout } from "react-icons/md";
-import { FaArrowRight, FaShippingFast } from "react-icons/fa";
-import { IoSettingsSharp } from "react-icons/io5";
-import { MdOutlineInventory2, MdBorderColor } from "react-icons/md";
-import { FaPersonRays } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { FaArrowRight, FaShippingFast } from "react-icons/fa";
+import { FaPersonRays } from "react-icons/fa6";
+import { IoSettingsSharp } from "react-icons/io5";
+import { MdDashboard, MdLogout, MdOutlineInventory2 } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { DashboardMain } from "../Dashboard/main/DashboardMain";
-import { InventoryMain } from "../Dashboard/Inventory/InventoryMain";
-import { CustomersMain } from "../Dashboard/Customers/CustomersMain";
-import { Settings } from "../Dashboard/settings/Settings";
-import { Shipping } from "../Dashboard/Shipping/Shipping";
+import DP from "../../assets/images/dp.png";
 import { useAuthContext } from "../../context/AuthContext";
+import { CustomersMain } from "../admin/Customers/CustomersMain";
+import { InventoryMain } from "../admin/Inventory/InventoryMain";
+import { DashboardMain } from "../admin/main/DashboardMain";
+import { Settings } from "../admin/settings/Settings";
+import { Shipping } from "../admin/Shipping/Shipping";
 
 // * local imports
 
@@ -182,7 +182,7 @@ const AdminSidebar = () => {
           <div>
             <div className="shadow-md navbar">
               <div className="navbar-start">
-                <p className="px-20 py-5 text-3xl text-black ">Hello Seller</p>
+                <p className="px-20 py-5 text-3xl text-black ">Hello Admin</p>
               </div>
               <div className="navbar-end">
                 <div className="dropdown dropdown-end">
@@ -194,7 +194,8 @@ const AdminSidebar = () => {
                     <div className="w-10 rounded-full">
                       <img
                         alt="Tailwind CSS Navbar component"
-                        src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                        src={DP}
+                        className="object-contain"
                       />
                     </div>
                   </div>

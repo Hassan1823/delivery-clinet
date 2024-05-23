@@ -75,8 +75,8 @@ export const SignUp = () => {
   return (
     <>
       <div className="hero min-h-screen bg-[#E5E5E5]">
-        <div className="flex-col hero-content lg:flex-row-reverse">
-          <div className="shadow-2xl card shrink-0 w-96 bg-base-100">
+        <div className="flex-col w-full hero-content lg:flex-row-reverse">
+          <div className="w-1/2 shadow-2xl card shrink-0 bg-base-100">
             <div className="flex items-center justify-center pt-2 text-2xl font-bold gradient-text">
               Sign up
             </div>

@@ -61,9 +61,9 @@ export const Login = () => {
   };
   return (
     <>
-      <div className="hero min-h-screen bg-[#E5E5E5]">
-        <div className="flex-col hero-content lg:flex-row-reverse">
-          <div className="w-full max-w-sm shadow-2xl card shrink-0 bg-base-100">
+      <div className="flex justify-center items-center min-h-screen bg-[#E5E5E5]">
+        <div className="flex-col w-1/3 hero-content lg:flex-row-reverse">
+          <div className="w-full shadow-2xl shrink-0 bg-base-100">
             <div className="flex items-center justify-center pt-2 text-2xl font-bold gradient-text">
               log in
             </div>

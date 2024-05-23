@@ -9,24 +9,14 @@ import QRCode from "qrcode";
 import { Hourglass } from "react-loader-spinner";
 import { Link } from "react-router-dom";
 import { backendLink } from "../../../../lib/data";
-import { AddShipping } from "./AddShipping";
 
 export const Shipping = () => {
   const [shippings, setShippings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [btnValue, setBtnValue] = useState("All");
   const [data, setData] = useState([]);
-
-  const btnData = [
-    "All",
-    "Ready to Sen",
-    "Prepare to send",
-    "Get into the system",
-    "delivery",
-    "the customers recieve the items",
-    "return orign",
-    "cancel",
-  ];
+  const [status, setStatus] = useState("");
+  const [shippingId, setShippingId] = useState("");
 
   const fetchShippings = async () => {
     try {
@@ -34,12 +24,12 @@ export const Shipping = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       const userId = user ? user?._id : "";
       const response = await fetch(
-        `${backendLink}/api/shipping/view-shippings/${userId}`
+        `${backendLink}/api/shipping/view-adminShippings`
       );
       if (response.ok) {
         const shippings = await response.json();
         console.log(shippings);
-        setShippings(shippings);
+        setShippings(shippings?.data);
       }
       setLoading(false);
     } catch (error) {
@@ -144,6 +134,17 @@ export const Shipping = () => {
     fetchShippings();
   }, []);
 
+  const btnData = [
+    "All",
+    "Ready to Sen",
+    "Prepare to send",
+    "Get into the system",
+    "delivery",
+    "the customers recieve the items",
+    "return orign",
+    "cancel",
+  ];
+
   useEffect(() => {
     // Define a mapping of button values to status strings
     const statusMapping = {
@@ -171,6 +172,39 @@ export const Shipping = () => {
     // Set the filtered data
     setData(filteredShippings);
   }, [btnValue, shippings]);
+
+  // console.log(shippingId ? shippingId : "no shippingId");
+
+  // * change shipment status starts here
+  const updateStatus = async () => {
+    try {
+      const response = await fetch(
+        `${backendLink}/api/shipping/updateStatus/${shippingId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(status),
+        }
+      );
+
+      if (!response.ok) {
+        console.log("Something went wrong");
+      } else {
+        const data = await response.json();
+        console.log(data);
+        fetchShippings();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    updateStatus();
+  }, [status]);
+
   return (
     <>
       <div
@@ -201,6 +235,15 @@ export const Shipping = () => {
                   </button>
                 );
               })}
+              {/* <div className="badge badge-neutral">Ready to Send</div>
+              <div className="badge badge-primary">Prepare to send </div>
+              <div className="badge badge-secondary">Get into the system</div>
+              <div className="badge badge-accent">delivery</div>
+              <div className="badge badge-ghost">
+                the customers recieve the items
+              </div>
+              <div className="badge badge-secondary">return orign</div>
+              <div className="badge badge-accent">cancel</div> */}
             </div>
           </div>
         </div>
@@ -212,7 +255,7 @@ export const Shipping = () => {
             >
               Download CSV
             </button>
-            <AddShipping refresh={fetchShippings} />
+            {/* <AddShipping refresh={fetchShippings} /> */}
           </div>
           <div className="flex bg-inherit bg-slate-50">
             <input
@@ -241,7 +284,7 @@ export const Shipping = () => {
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Time</th>
+                    <th>Status</th>
                     <th>Customer</th>
                     <th>Phone</th>
                     <th>Total Cost</th>
@@ -255,19 +298,37 @@ export const Shipping = () => {
                 <tbody>
                   {/* row 1 */}
 
-                  {data.length === 0 ? (
+                  {data?.length === 0 ? (
                     <div className="flex justify-center w-full text-xl font-semibold">
                       No Shipping found
                     </div>
                   ) : (
                     <>
-                      {data.map((shipping, index) => (
+                      {data?.map((shipping, index) => (
                         <tr key={shipping?._id}>
                           <td>{index + 1}</td>
 
                           {/* formate the time  */}
                           <td>
-                            {new Date(shipping?.createdAt).toLocaleString()}
+                            <select
+                              id="statusDropdown"
+                              className="outline-none focus:outline-none"
+                              onChange={(e) => {
+                                setStatus(e.target.value);
+                                setShippingId(shipping?._id);
+                              }}
+                            >
+                              <option value="">
+                                {shipping.status || "pending"}
+                              </option>
+                              <option value="ready">Ready</option>
+                              <option value="prepare">Prepare</option>
+                              <option value="system">System</option>
+                              <option value="delivery">Delivery</option>
+                              <option value="received">Received</option>
+                              <option value="return">Return</option>
+                              <option value="cancel">Cancel</option>
+                            </select>
                           </td>
 
                           <td>{shipping?.customer?.name}</td>

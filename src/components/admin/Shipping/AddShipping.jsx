@@ -23,7 +23,6 @@ export const AddShipping = ({ refresh }) => {
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, isLoading] = useState(true);
-  const [perKg, setPerKg] = useState(0);
 
   //   * fetch user products
   const fetchProducts = async () => {
@@ -74,36 +73,11 @@ export const AddShipping = ({ refresh }) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
     reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
-
-  const quantity = watch("quantity");
-  const id = watch("productId");
-  const [shippingCost, setShippingCost] = useState(0);
-  const [price, setPrice] = useState(0);
-
-  // Effect to calculate shipping cost whenever quantity changes
-  useEffect(() => {
-    if (quantity && id) {
-      products.map((item, idx) => {
-        if (item._id === id) {
-          setPrice(item.price);
-          return;
-        }
-      });
-
-      console.log(price);
-
-      const calculatedCost = quantity * price + 150;
-      setShippingCost(calculatedCost);
-    } else {
-      setShippingCost(0); // Reset cost if quantity is cleared
-    }
-  }, [quantity, id, price, products]);
 
   const onSubmit = async (data) => {
     event.preventDefault();
@@ -293,8 +267,6 @@ export const AddShipping = ({ refresh }) => {
                       id="shipping_cost"
                       name="shipping_cost"
                       className={`border-2 rounded-lg py-2 px-3  bg-white w-3/4 `}
-                      value={shippingCost.toString()} // Set the value of the input to the calculated shipping cost
-                      readOnly // Make the input read-only so users cannot manually edit the shipping cost
                       {...register("shippingCost")}
                     />
                     {errors.shippingCost && (

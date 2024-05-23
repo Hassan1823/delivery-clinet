@@ -5,7 +5,7 @@ import { backendLink } from "../../../../lib/data";
 export const Top = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [insta, setInsta] = useState(0);
+  const [insta, setInsta] = useState();
   const [facebook, setFacebook] = useState(0);
   const [whatsapp, setWhatsapp] = useState(0);
 
@@ -19,9 +19,7 @@ export const Top = () => {
     try {
       setIsLoading(true);
       const user = JSON.parse(localStorage.getItem("user"));
-      const response = await fetch(
-        `${backendLink}/api/customer/getcustomers/${user?._id}`
-      );
+      const response = await fetch(`${backendLink}/api/customer/allCustomers`);
       if (response.ok) {
         const Customers = await response.json();
         Customers?.data.map((item, idx) => {

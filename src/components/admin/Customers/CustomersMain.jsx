@@ -38,9 +38,7 @@ export const CustomersMain = () => {
     try {
       setLoading(true);
       const user = JSON.parse(localStorage.getItem("user"));
-      const response = await fetch(
-        `${backendLink}/api/customer/getcustomers/${user?._id}`
-      );
+      const response = await fetch(`${backendLink}/api/customer/allCustomers`);
       if (response.ok) {
         const Customers = await response.json();
         //   console.log(Customers);
@@ -67,7 +65,7 @@ export const CustomersMain = () => {
         setLoading(true);
         const user = JSON.parse(localStorage.getItem("user"));
         const userID = user ? user?._id : "";
-        fetch(`${backendLink}/api/customer/deletecustomer/${id}/${userID}`, {
+        fetch(`${backendLink}/api/customer/adminDeletecustomer/${id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -138,8 +136,10 @@ export const CustomersMain = () => {
 
       const userID = user ? user?._id : "";
 
+      console.log("updateCustomerID ::", updateCustomerID);
+
       const response = await fetch(
-        `${backendLink}/api/customer/updatecustomer/${updateCustomerID}`,
+        `${backendLink}/api/customer/adminUpdateCustomer/${updateCustomerID}`,
         {
           method: "PUT",
           headers: {
@@ -152,7 +152,6 @@ export const CustomersMain = () => {
             address: data.address,
             salesChannel: data.salesChannel,
             socialUsername: data.socialUsername,
-            userID: userID,
           }),
         }
       );

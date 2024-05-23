@@ -12,6 +12,7 @@ import { CustomersMain } from "./Customers/CustomersMain";
 import { Shipping } from "./Shipping/Shipping";
 import { useAuthContext } from "../../context/AuthContext";
 import { Settings } from "./settings/Settings";
+import Dp from "../../assets/images/dp.png";
 
 const variants = {
   expanded: {
@@ -191,7 +192,8 @@ function Sidebar() {
                     <div className="w-10 rounded-full">
                       <img
                         alt="Tailwind CSS Navbar component"
-                        src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                        src={Dp}
+                        className="object-contain"
                       />
                     </div>
                   </div>
