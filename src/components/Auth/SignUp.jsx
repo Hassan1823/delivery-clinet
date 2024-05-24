@@ -25,6 +25,7 @@ const schema = yup.object().shape({
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),
   gender: yup.string().required("check anyone"),
+  role: yup.string().required("Please Select The Role"),
 });
 
 export const SignUp = () => {
@@ -172,7 +173,7 @@ export const SignUp = () => {
               </div>
 
               {/* Gender */}
-              <div className="form-control w-fit">
+              {/* <div className="form-control w-fit">
                 <label className="cursor-pointer label ">
                   <span className="label-text">Male</span>
                   <input
@@ -199,6 +200,76 @@ export const SignUp = () => {
                     <p className="text-error">{errors.gender.message}</p>
                   )}
                 </label>
+              </div> */}
+
+              {/* Select gender */}
+              <div className="form-control w-fit">
+                <label className="cursor-pointer label">
+                  <span className="label-text">Select Gender</span>
+                </label>
+                <div className="flex space-x-4">
+                  <label className="cursor-pointer label">
+                    <span className="mr-2 label-text">Male</span>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="male"
+                      className="radio checked:bg-red-500"
+                      {...register("gender")}
+                    />
+                    {errors.gender && (
+                      <p className="text-error">{errors.gender.message}</p>
+                    )}
+                  </label>
+                  <label className="cursor-pointer label">
+                    <span className="mr-2 label-text">Female</span>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="female"
+                      className="radio checked:bg-red-500"
+                      {...register("gender")}
+                    />
+                    {errors.gender && (
+                      <p className="text-error">{errors.gender.message}</p>
+                    )}
+                  </label>
+                </div>
+              </div>
+
+              {/* Select Role */}
+              <div className="form-control w-fit">
+                <label className="cursor-pointer label">
+                  <span className="label-text">Select Role</span>
+                </label>
+                <div className="flex space-x-4">
+                  <label className="cursor-pointer label">
+                    <span className="mr-2 label-text">User</span>
+                    <input
+                      type="radio"
+                      name="role"
+                      value="user"
+                      className="radio checked:bg-red-500"
+                      {...register("role")}
+                    />
+                    {errors.role && (
+                      <p className="text-error">{errors.role.message}</p>
+                    )}
+                  </label>
+                  <label className="cursor-pointer label">
+                    <span className="mr-2 label-text">Admin</span>
+                    <input
+                      type="radio"
+                      name="role"
+                      value="admin"
+                      className="radio checked:bg-red-500"
+                      {...register("role")}
+                    />
+                    {errors.role && (
+                      <p className="text-error">{errors.role.message}</p>
+                    )}
+                  </label>
+                </div>
               </div>
 
               {/* Already have an account? Login */}

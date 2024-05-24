@@ -36,13 +36,20 @@ export const Login = () => {
         console.log("Login successful");
         const user = await response.json();
         console.log(user);
-        if (user.status === "verified") {
+        if (user.data.role === "admin") {
+          if (user.data.isVerified === false) {
+            toast.error("Please Wait Until Admin Approval");
+            navigate("/");
+            return;
+          }
+        }
+        if (user.data.status === "verified") {
           localStorage.setItem("user", JSON.stringify(user));
           setUser(user);
           setIsLogged(true);
           toast.success("Login successful");
           navigate("/dashboard");
-        } else if (user.status === "admin unverified") {
+        } else if (user.data.status === "admin unverified") {
           toast.success("Please Wait Until Admin Approval");
           navigate("/");
         } else {

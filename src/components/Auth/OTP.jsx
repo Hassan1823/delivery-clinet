@@ -71,11 +71,20 @@ export const OTP = () => {
         }
 
         const responseData = await response.json();
-        console.log("OTP verification successful:", responseData);
-        toast.success("OTP verification successful");
-        localStorage.setItem("user", JSON.stringify(responseData));
-        setIsLogged(true);
-        navigate("/dashboard");
+        if (
+          responseData.data.isVerified === false &&
+          responseData.data.role === "admin"
+        ) {
+          toast.success("Please Wait For Admin Approval");
+          navigate("/");
+          return;
+        } else {
+          console.log("OTP verification successful:", responseData);
+          toast.success("OTP verification successful");
+          localStorage.setItem("user", JSON.stringify(responseData.data));
+          setIsLogged(true);
+          navigate("/dashboard");
+        }
       } catch (error) {
         console.error("Error during OTP verification:", error);
         toast.error("Error during OTP verification");

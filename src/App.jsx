@@ -14,6 +14,7 @@ import { OTP } from "./components/Auth/OTP";
 import Forgetpass from "./pages/ForgotPassword/Forgetpass";
 import ResetPasswordPage from "./pages/ForgotPassword/Resetpass";
 import AdminComp from "./pages/Admin/AdminComp";
+import VerifyPage from "./pages/verifyPage";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             path="/resetPassword/:resetToken"
             element={<ResetPasswordPage />}
           />
+          <Route path="/:verify" element={<VerifyPage />} />
         </Routes>
       </BrowserRouter>
     </>
