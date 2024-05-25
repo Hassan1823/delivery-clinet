@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,6 +15,7 @@ const schema = yup.object().shape({
 export const Login = () => {
   const navigate = useNavigate();
   const { setUser, setIsLogged } = useAuthContext();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -25,6 +26,7 @@ export const Login = () => {
   });
   const onSubmit = async (data) => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${backendLink}/api/auth/login`, {
         method: "POST",
         headers: {
@@ -36,14 +38,14 @@ export const Login = () => {
         console.log("Login successful");
         const user = await response.json();
         console.log(user);
-        if (user.data.role === "admin") {
+        // if (user.data.role === "admin") {
+        // }
+        if (user.data.status === "verified") {
           if (user.data.isVerified === false) {
             toast.error("Please Wait Until Admin Approval");
             navigate("/");
             return;
           }
-        }
-        if (user.data.status === "verified") {
           localStorage.setItem("user", JSON.stringify(user));
           setUser(user);
           setIsLogged(true);
@@ -62,7 +64,9 @@ export const Login = () => {
       }
 
       reset(); // Reset the form after successful submission (optional)
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error("Error during login:", error);
     }
   };
@@ -116,13 +120,13 @@ export const Login = () => {
                 </label>
                 <label className="label">
                   <Link to="/signup" className="label-text-alt link link-hover">
-                    Don't have an account? Sign up
+                    {`Don't have an account? Sign up`}
                   </Link>
                 </label>
               </div>
               <div className="mt-6 form-control">
                 <button type="submit" className="btn btn-primary">
-                  Login
+                  {isLoading ? "Loading ..." : "Login"}
                 </button>
               </div>
             </form>

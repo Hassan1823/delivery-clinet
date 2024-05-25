@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -29,6 +29,7 @@ const schema = yup.object().shape({
 });
 
 export const SignUp = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -43,6 +44,7 @@ export const SignUp = () => {
     event.preventDefault();
 
     try {
+      setIsLoading(true);
       const response = await fetch(`${backendLink}/api/auth/signup`, {
         method: "POST",
         headers: {
@@ -67,10 +69,12 @@ export const SignUp = () => {
 
       navigate("/confirmotp");
       toast.success("Signup successful");
+      setIsLoading(false);
       reset();
     } catch (error) {
       console.error("Error during signup:", error.message);
       toast.error(`${error.message}`);
+      setIsLoading(false);
     }
   };
   return (
@@ -282,7 +286,7 @@ export const SignUp = () => {
               {/* Submit Button */}
               <div className="mt-6 form-control">
                 <button type="submit" className="btn btn-primary">
-                  Sign up
+                  {isLoading ? "Loading ..." : "Sign up"}
                 </button>
               </div>
             </form>

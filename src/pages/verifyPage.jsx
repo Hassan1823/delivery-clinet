@@ -67,7 +67,7 @@ const VerifyPage = () => {
   return (
     <div className="pt-[10%] w-full h-screen flex flex-col justify-start gap-6 items-center">
       <h1 className="text-xl font-semibold leading-6 text-black">
-        Admin Verification for {data?.fullName || "User"}
+        {data?.role || ""} Verification for {data?.fullName || "User"}
       </h1>
       <div className="flex items-start justify-center w-full h-auto gap-4">
         <button

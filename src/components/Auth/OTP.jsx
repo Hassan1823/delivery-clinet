@@ -8,6 +8,7 @@ export const OTP = () => {
   const { setIsLogged } = useAuthContext();
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [otpError, setOtpError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const otpBoxReference = useRef([]);
   const navigate = useNavigate();
   const handleChange = (value, index) => {
@@ -39,6 +40,7 @@ export const OTP = () => {
       // console.log(activation_token ? activation_token : "no activation_token");
       // Here you can add the submit function
       try {
+        setIsLoading(true);
         const response = await fetch(`${backendLink}/api/auth/activateUser`, {
           method: "POST",
           headers: {
@@ -57,6 +59,7 @@ export const OTP = () => {
             const errorData = await response.json();
             console.error("Error verifying OTP:", errorData);
             toast.error(errorData);
+            navigate("/login");
             throw new Error(
               errorData.message || `Server error: ${response.status}`
             );
@@ -71,10 +74,7 @@ export const OTP = () => {
         }
 
         const responseData = await response.json();
-        if (
-          responseData.data.isVerified === false &&
-          responseData.data.role === "admin"
-        ) {
+        if (responseData.data.isVerified === false) {
           toast.success("Please Wait For Admin Approval");
           navigate("/");
           return;
@@ -85,7 +85,9 @@ export const OTP = () => {
           setIsLogged(true);
           navigate("/dashboard");
         }
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error during OTP verification:", error);
         toast.error("Error during OTP verification");
         //window.location.reload();
@@ -120,7 +122,7 @@ export const OTP = () => {
           className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
           onClick={validateOTP}
         >
-          Verify
+          {isLoading ? "Loading ..." : "Verify"}
         </button>
       </div>
       <p className={`text-lg text-white mt-4 ${otpError ? "error-show" : ""}`}>
