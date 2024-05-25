@@ -46,7 +46,7 @@ export const Login = () => {
             navigate("/");
             return;
           }
-          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("user", JSON.stringify(user.data));
           setUser(user);
           setIsLogged(true);
           toast.success("Login successful");

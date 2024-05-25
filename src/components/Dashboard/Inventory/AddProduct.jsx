@@ -115,8 +115,10 @@ export const AddProduct = ({ refresh, setLoading, loading }) => {
       refresh();
       setLoading(false);
       closeModal();
+      setFileA(null);
     } catch (error) {
       setLoading(false);
+      setFileA(null);
       console.log(error);
       toast.error("Something went wrong ");
     }
