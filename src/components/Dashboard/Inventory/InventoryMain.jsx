@@ -21,6 +21,7 @@ const schema = yup.object().shape({
 });
 export const InventoryMain = () => {
   const [products, setProducts] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
   const [currentProducts, setCurrentProducts] = useState([]);
   const [updateProductID, setUpdateProductID] = useState("");
   const [loading, setLoading] = useState(false);
@@ -169,6 +170,50 @@ export const InventoryMain = () => {
     }
   };
 
+  // * search products by name starts here
+
+  useEffect(() => {
+    console.log(searchValue ? searchValue : "no searchValue");
+    const searchProducts = async () => {
+      try {
+        setLoading(true);
+        const user = JSON.parse(localStorage.getItem("user"));
+        const userId = user ? user?._id : "";
+        const response = await fetch(
+          `${backendLink}/api/product/searchProducts/${userId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: searchValue,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          toast.error("Something went wrong");
+          fetchProducts();
+        } else {
+          const res = await response.json();
+          console.log(res.products);
+          setProducts(res.products);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        fetchProducts();
+        setLoading(false);
+      }
+    };
+    if (searchProducts && searchValue !== "") {
+      searchProducts();
+    } else {
+      fetchProducts();
+    }
+  }, [searchValue]);
+
   return (
     <>
       <div className="flex flex-col w-full min-h-screen gap-5 px-20 py-10 text-black">
@@ -199,6 +244,7 @@ export const InventoryMain = () => {
             <input
               className="w-full input input-bordered join-item bg-slate-50"
               placeholder="search"
+              onChange={(e) => setSearchValue(e.target.value)}
             />
           </div>
           {loading ? (
