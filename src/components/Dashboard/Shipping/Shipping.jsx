@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import { backendLink } from "../../../../lib/data";
 import { AddShipping } from "./AddShipping";
 import toast from "react-hot-toast";
+import { IoMdDownload } from "react-icons/io";
+import { GiCancel } from "react-icons/gi";
 
 export const Shipping = () => {
   const [shippings, setShippings] = useState([]);
@@ -215,6 +217,35 @@ export const Shipping = () => {
       fetchShippings();
     }
   }, [searchValue]);
+
+  const cancelShipment = async ({ shippingId }) => {
+    try {
+      setLoading(true);
+      console.log("shippingId :: ", shippingId);
+      const response = await fetch(
+        `${backendLink}/api/shipping/cancelShipment/${shippingId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        toast.error("Something Went Wrong");
+      } else {
+        const res = await response.json();
+
+        toast.success(res.message);
+        fetchShippings();
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div
@@ -294,7 +325,8 @@ export const Shipping = () => {
                     <th>Weight</th>
                     <th>shipping</th>
                     <th>tracking no</th>
-                    <th>Download Label</th>
+                    <th>Cancel</th>
+                    <th>Download</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -317,7 +349,7 @@ export const Shipping = () => {
 
                           <td>{shipping?.customer?.name}</td>
                           <td>{shipping?.customer?.phone}</td>
-                          <td>{shipping?.totalPrice}</td>
+                          <td>{shipping?.shippingCost}</td>
                           <td>{shipping?.quantity}</td>
                           <td>
                             {(shipping?.totalWeight / 1000).toFixed(4)} kg
@@ -330,13 +362,23 @@ export const Shipping = () => {
                               {shipping?._id}
                             </Link>
                           </td>
+                          <td>
+                            <button
+                              className="flex items-center justify-center px-4 py-2 font-bold text-white bg-yellow-600 shadow-2xl rounded-xl "
+                              onClick={() =>
+                                cancelShipment({ shippingId: shipping?._id })
+                              }
+                            >
+                              <GiCancel size={22} />
+                            </button>
+                          </td>
 
                           <td>
                             <button
-                              className="px-4 py-2 font-bold text-white bg-yellow-600 shadow-2xl rounded-xl "
+                              className="flex items-center justify-center px-4 py-2 font-bold text-white bg-yellow-600 shadow-2xl rounded-xl "
                               onClick={() => generateChallanPDF(shipping)}
                             >
-                              Download
+                              <IoMdDownload size={22} />
                             </button>
                           </td>
                         </tr>
@@ -356,7 +398,8 @@ export const Shipping = () => {
                     <th>Weight</th>
                     <th>shipping</th>
                     <th>tracking no</th>
-                    <th>Download Label</th>
+                    <th>Cancel</th>
+                    <th>Download</th>
                   </tr>
                 </tfoot>
               </table>

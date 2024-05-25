@@ -273,7 +273,12 @@ export const CustomersMain = () => {
                   ) : (
                     <>
                       {customers.map((customer, index) => (
-                        <tr key={customer._id}>
+                        <tr
+                          key={customer._id}
+                          className={`${
+                            customer?.cancelOrders > 2 && "bg-[#ffcccb]"
+                          }`}
+                        >
                           <td>{index + 1}</td>
                           <td>
                             <div>

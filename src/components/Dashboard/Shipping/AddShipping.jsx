@@ -15,7 +15,7 @@ const schema = yup.object().shape({
   customerId: yup.string().required("Customer is required"),
   productId: yup.string().required("Product is required"),
   quantity: yup.string().required("Quantity is required"),
-  shippingCost: yup.string().required("Shipping Cost is required"),
+  shippingCost: yup.number().required("Shipping Cost is required"),
 });
 
 export const AddShipping = ({ refresh }) => {
@@ -74,6 +74,7 @@ export const AddShipping = ({ refresh }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     watch,
     formState: { errors },
     reset,
@@ -99,15 +100,16 @@ export const AddShipping = ({ refresh }) => {
       console.log(price);
 
       const calculatedCost = quantity * price + 150;
-      setShippingCost(calculatedCost);
+      setValue("shippingCost", calculatedCost); // Update the shippingCost field
     } else {
-      setShippingCost(0); // Reset cost if quantity is cleared
+      setValue("shippingCost", 0); // Reset cost if quantity is cleared
     }
-  }, [quantity, id, price, products]);
+  }, [quantity, id, price, products, setValue]);
 
   const onSubmit = async (data) => {
     event.preventDefault();
     const { quantity, shippingCost } = data;
+    console.log("shippingCost :::", shippingCost);
 
     // they must not be negetive
     if (quantity < 0 || shippingCost < 0) {
@@ -141,8 +143,13 @@ export const AddShipping = ({ refresh }) => {
       if (response.ok) {
         console.log("Shipping added successful");
         const shipping = await response.json();
-        console.log("Shipping:", shipping);
-        toast.success("Shipping addeFd successful");
+        console.log("Shipping:", shipping.cancelOrders);
+        console.log("cancel orders ::", shipping.cancelOrders || "no cancel");
+        if (shipping.cancelOrders > 2) {
+          toast.error("This User Already Cancelled Too Many Orders");
+        } else {
+          toast.success("Shipping added successful");
+        }
 
         reset();
         setSelectedImage(null);
@@ -285,7 +292,8 @@ export const AddShipping = ({ refresh }) => {
                     htmlFor="phone"
                     className="block mb-2 text-sm font-bold"
                   >
-                    Shipping Cost :
+                    Total Cost <br />
+                    <p className="text-xs">Shipping Price</p>
                   </label>
                   <div className={`flex flex-col  w-3/4 `}>
                     <input
