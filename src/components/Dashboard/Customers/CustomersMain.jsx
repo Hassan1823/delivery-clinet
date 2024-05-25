@@ -27,6 +27,7 @@ export const CustomersMain = () => {
   const [customers, setCustomers] = useState([]);
   const [currentCustomers, setCurrentCustomers] = useState([]);
   const [updateCustomerID, setUpdateCustomerID] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -173,7 +174,47 @@ export const CustomersMain = () => {
 
   // console.log(currentCustomers ? currentCustomers : "no currentCustomers");
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  useEffect(() => {
+    console.log(searchValue ? searchValue : "no searchValue");
+    const searchProducts = async () => {
+      try {
+        setLoading(true);
+        const user = JSON.parse(localStorage.getItem("user"));
+        const userId = user ? user?._id : "";
+        const response = await fetch(
+          `${backendLink}/api/customer/searchCustomers/${userId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: searchValue,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          toast.error("Something went wrong");
+          fetchCustomers();
+        } else {
+          const res = await response.json();
+          console.log(res.customers);
+          setCustomers(res.customers);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        fetchCustomers();
+        setLoading(false);
+      }
+    };
+    if (searchProducts && searchValue !== "") {
+      searchProducts();
+    } else {
+      fetchCustomers();
+    }
+  }, [searchValue]);
 
   return (
     <>
@@ -201,6 +242,7 @@ export const CustomersMain = () => {
             <input
               className="w-full input input-bordered join-item bg-slate-50"
               placeholder="search"
+              onChange={(e) => setSearchValue(e.target.value)}
             />
           </div>
 

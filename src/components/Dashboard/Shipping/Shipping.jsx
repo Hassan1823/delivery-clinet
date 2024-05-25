@@ -10,11 +10,13 @@ import { Hourglass } from "react-loader-spinner";
 import { Link } from "react-router-dom";
 import { backendLink } from "../../../../lib/data";
 import { AddShipping } from "./AddShipping";
+import toast from "react-hot-toast";
 
 export const Shipping = () => {
   const [shippings, setShippings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [btnValue, setBtnValue] = useState("All");
+  const [searchValue, setSearchValue] = useState("");
   const [data, setData] = useState([]);
 
   const btnData = [
@@ -171,6 +173,48 @@ export const Shipping = () => {
     // Set the filtered data
     setData(filteredShippings);
   }, [btnValue, shippings]);
+
+  useEffect(() => {
+    console.log(searchValue ? searchValue : "no searchValue");
+    const searchProducts = async () => {
+      try {
+        setLoading(true);
+        const user = JSON.parse(localStorage.getItem("user"));
+        const userId = user ? user?._id : "";
+        const response = await fetch(
+          `${backendLink}/api/shipping/searchShippings/${userId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: searchValue,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          toast.error("Something went wrong");
+          fetchShippings();
+        } else {
+          const res = await response.json();
+          console.log(res.shippings);
+          setData(res.shippings);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        fetchShippings();
+        setLoading(false);
+      }
+    };
+    if (searchProducts && searchValue !== "") {
+      searchProducts();
+    } else {
+      fetchShippings();
+    }
+  }, [searchValue]);
   return (
     <>
       <div
@@ -218,6 +262,7 @@ export const Shipping = () => {
             <input
               className="w-full input input-bordered join-item bg-slate-50"
               placeholder="search"
+              onChange={(e) => setSearchValue(e.target.value)}
             />
           </div>
           {loading ? (
