@@ -24,6 +24,7 @@ export const AddCustomer = ({ refresh }) => {
     resolver: yupResolver(schema),
   });
   const onSubmit = async (data) => {
+    event.preventDefault();
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const userID = user ? user?._id : "";
@@ -49,7 +50,7 @@ export const AddCustomer = ({ refresh }) => {
         console.log("customer added successful");
         const customer = await response.json();
         console.log("customer:", customer);
-        toast.success("customer added successful");
+        toast.success(customer.message || "Success");
         refresh();
         reset();
       } else {
@@ -64,7 +65,7 @@ export const AddCustomer = ({ refresh }) => {
   return (
     <>
       <button
-        className="text-white bg-yellow-600 font-bold py-2 px-4 rounded-xl shadow-2xl flex gap-1"
+        className="flex gap-1 px-4 py-2 font-bold text-white bg-yellow-600 shadow-2xl rounded-xl"
         onClick={() => document.getElementById("addcustomer").showModal()}
       >
         <IoMdAddCircleOutline className="text-2xl text-white" />
@@ -72,15 +73,15 @@ export const AddCustomer = ({ refresh }) => {
       </button>
       <dialog id="addcustomer" className="modal">
         <div className="modal-box w-11/12 max-w-5xl bg-[#E5E5E5]">
-          <h3 className="font-bold text-lg">Add Customer Form</h3>
+          <h3 className="text-lg font-bold">Add Customer Form</h3>
 
           <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
             {/* customer name */}
-            <div className="my-4 flex mx-20 gap-10 justify-between">
-              <label htmlFor="name" className="block text-sm font-bold mb-2">
+            <div className="flex justify-between gap-10 mx-20 my-4">
+              <label htmlFor="name" className="block mb-2 text-sm font-bold">
                 Customer Name :
               </label>
-              <div className="flex-flex-col w-3/4">
+              <div className="w-3/4 flex-flex-col">
                 <input
                   type="text"
                   id="name"
@@ -91,16 +92,16 @@ export const AddCustomer = ({ refresh }) => {
                   {...register("name")}
                 />
                 {errors.name && (
-                  <p className="text-red-500 text-sm">{errors.name.message}</p>
+                  <p className="text-sm text-red-500">{errors.name.message}</p>
                 )}
               </div>
             </div>
             {/* customer email */}
-            <div className="my-4 flex mx-20 gap-10 justify-between">
-              <label htmlFor="email" className="block text-sm font-bold mb-2">
+            <div className="flex justify-between gap-10 mx-20 my-4">
+              <label htmlFor="email" className="block mb-2 text-sm font-bold">
                 Email :
               </label>
-              <div className="flex-flex-col w-3/4">
+              <div className="w-3/4 flex-flex-col">
                 <input
                   type="email"
                   id="email"
@@ -111,16 +112,16 @@ export const AddCustomer = ({ refresh }) => {
                   {...register("email")}
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email.message}</p>
+                  <p className="text-sm text-red-500">{errors.email.message}</p>
                 )}
               </div>
             </div>
             {/* customer Phone */}
-            <div className="my-4 flex mx-20 gap-10 justify-between">
-              <label htmlFor="phone" className="block text-sm font-bold mb-2">
+            <div className="flex justify-between gap-10 mx-20 my-4">
+              <label htmlFor="phone" className="block mb-2 text-sm font-bold">
                 Phone :
               </label>
-              <div className="flex-flex-col w-3/4">
+              <div className="w-3/4 flex-flex-col">
                 <input
                   type="text"
                   id="phone"
@@ -131,16 +132,16 @@ export const AddCustomer = ({ refresh }) => {
                   {...register("phone")}
                 />
                 {errors.phone && (
-                  <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                  <p className="text-sm text-red-500">{errors.phone.message}</p>
                 )}
               </div>
             </div>
             {/* Address text area Category */}
-            <div className="my-4 flex mx-20 gap-10 justify-between">
-              <label htmlFor="address" className="block text-sm font-bold mb-2">
+            <div className="flex justify-between gap-10 mx-20 my-4">
+              <label htmlFor="address" className="block mb-2 text-sm font-bold">
                 Address :
               </label>
-              <div className="flex-flex-col w-3/4">
+              <div className="w-3/4 flex-flex-col">
                 <textarea
                   id="address"
                   name="address"
@@ -150,21 +151,21 @@ export const AddCustomer = ({ refresh }) => {
                   {...register("address")}
                 />
                 {errors.address && (
-                  <p className="text-red-500 text-sm">
+                  <p className="text-sm text-red-500">
                     {errors.address.message}
                   </p>
                 )}
               </div>
             </div>
             {/* sale channal select field   */}
-            <div className="my-4 flex mx-20 gap-10 justify-between">
+            <div className="flex justify-between gap-10 mx-20 my-4">
               <label
                 htmlFor="salesChannel"
-                className="block text-sm font-bold mb-2"
+                className="block mb-2 text-sm font-bold"
               >
                 Sales Channel :
               </label>
-              <div className="flex-flex-col w-3/4">
+              <div className="w-3/4 flex-flex-col">
                 {" "}
                 <select
                   id="salesChannel"
@@ -182,21 +183,21 @@ export const AddCustomer = ({ refresh }) => {
                   <option value="others">Others</option>
                 </select>
                 {errors.salesChannel && (
-                  <p className="text-red-500 text-sm">
+                  <p className="text-sm text-red-500">
                     {errors.salesChannel.message}
                   </p>
                 )}
               </div>
             </div>
             {/* social media username */}
-            <div className="my-4 flex mx-20 gap-10 justify-between">
+            <div className="flex justify-between gap-10 mx-20 my-4">
               <label
                 htmlFor="socialUsername"
-                className="block text-sm font-bold mb-2"
+                className="block mb-2 text-sm font-bold"
               >
                 Social Username :
               </label>
-              <div className="flex-flex-col w-3/4">
+              <div className="w-3/4 flex-flex-col">
                 <input
                   type="text"
                   id="socialUsername"
@@ -207,7 +208,7 @@ export const AddCustomer = ({ refresh }) => {
                   {...register("socialUsername")}
                 />
                 {errors.socialUsername && (
-                  <p className="text-red-500 text-sm">
+                  <p className="text-sm text-red-500">
                     {errors.socialUsername.message}
                   </p>
                 )}
@@ -217,7 +218,7 @@ export const AddCustomer = ({ refresh }) => {
             <div className="flex justify-center">
               <button
                 type="submit"
-                className="text-white bg-yellow-600 font-bold py-2 px-4 rounded-xl shadow-2xl flex gap-1"
+                className="flex gap-1 px-4 py-2 font-bold text-white bg-yellow-600 shadow-2xl rounded-xl"
               >
                 Add Custoomer
               </button>
@@ -227,7 +228,7 @@ export const AddCustomer = ({ refresh }) => {
           <div className="modal-action">
             <form method="dialog">
               {/* if there is a button, it will close the modal */}
-              <button className="btn text-white bg-red-700 font-bold py-2 px-4 rounded-lg shadow-2xl">
+              <button className="px-4 py-2 font-bold text-white bg-red-700 rounded-lg shadow-2xl btn">
                 Close
               </button>
             </form>

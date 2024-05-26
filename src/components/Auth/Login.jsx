@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAuthContext } from "../../context/AuthContext";
 import toast from "react-hot-toast";
-import { backendLink } from "../../../lib/data";
+import { adminLink, backendLink } from "../../../lib/data";
 
 const schema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -50,6 +50,10 @@ export const Login = () => {
           setUser(user);
           setIsLogged(true);
           toast.success("Login successful");
+          if (user.data.role === "admin" || user.data.role === "Admin") {
+            window.location.href = `${adminLink}/${user?.data._id}`;
+            return;
+          }
           navigate("/dashboard");
         } else if (user.data.status === "admin unverified") {
           toast.success("Please Wait Until Admin Approval");

@@ -256,6 +256,7 @@ export const CustomersMain = () => {
                   <tr>
                     <th>#</th>
                     <th>Customr Name</th>
+                    <th>Email</th>
                     <th>Phone</th>
                     <th>Address</th>
                     <th>Delivery</th>
@@ -281,10 +282,9 @@ export const CustomersMain = () => {
                         >
                           <td>{index + 1}</td>
                           <td>
-                            <div>
-                              <div className="font-bold">{customer?.name}</div>
-                            </div>
+                            <div className="font-bold">{customer?.name}</div>
                           </td>
+                          <td>{customer?.email}</td>
                           <td>{customer?.phone}</td>
                           <td>{customer?.address}</td>
 

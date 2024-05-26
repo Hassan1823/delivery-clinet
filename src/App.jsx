@@ -1,19 +1,18 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Mainpage } from "./pages/Mainpages/Mainpage";
-import { LoginPage } from "./pages/Login/LoginPage";
-import { Signuppage } from "./pages/Signup/Signuppage";
-import DashboardPage from "./pages/Dashboard/DashboardPage";
+import { OTP } from "./components/Auth/OTP";
+import { DetailOrder } from "./components/TrackOrder/DetailOrder";
 import { AboutUSPage } from "./pages/AboutUs/AboutUSPage";
 import { ContactUSPage } from "./pages/ContactUs/ContactUSPage";
-import { FeaturesPages } from "./pages/Features/FeaturesPages";
+import DashboardPage from "./pages/Dashboard/DashboardPage";
 import { Error404 } from "./pages/error/Error404";
-import { TrackOrderHome } from "./pages/TrackOrder/TrackOrderHome";
-import { DetailOrder } from "./components/TrackOrder/DetailOrder";
-import { OTP } from "./components/Auth/OTP";
+import { FeaturesPages } from "./pages/Features/FeaturesPages";
 import Forgetpass from "./pages/ForgotPassword/Forgetpass";
 import ResetPasswordPage from "./pages/ForgotPassword/Resetpass";
-import AdminComp from "./pages/Admin/AdminComp";
+import { LoginPage } from "./pages/Login/LoginPage";
+import { Mainpage } from "./pages/Mainpages/Mainpage";
+import { Signuppage } from "./pages/Signup/Signuppage";
+import { TrackOrderHome } from "./pages/TrackOrder/TrackOrderHome";
 import VerifyPage from "./pages/verifyPage";
 
 function App() {
@@ -26,7 +25,7 @@ function App() {
 
           <Route path="/signup" element={<Signuppage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/admin" element={<AdminComp />} />
+          {/* <Route path="/admin" element={<AdminComp />} /> */}
           <Route path="/aboutus" element={<AboutUSPage />} />
           <Route path="/contactus" element={<ContactUSPage />} />
           <Route path="/features" element={<FeaturesPages />} />
