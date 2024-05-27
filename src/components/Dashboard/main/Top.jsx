@@ -24,18 +24,35 @@ export const Top = () => {
       );
       if (response.ok) {
         const Customers = await response.json();
-        Customers?.data.map((item, idx) => {
-          if (item.salesChannel === "whatsapp") {
-            setWhatsapp(whatsapp + 1);
+        const seenIds = new Set(); // Keep track of IDs we've already processed
+
+        Customers?.data.forEach((item) => {
+          if (seenIds.has(item._id)) {
+            return; // Skip if we've already processed this item
           }
-          if (item.salesChannel === "instagram") {
-            setInsta(insta + 1);
+
+          // console.log(`Processing unique item:`, item.salesChannel);
+
+          switch (item.salesChannel) {
+            case "whatsapp":
+              setWhatsapp((prevCount) => {
+                // console.log("Updating WhatsApp count:", prevCount + 1);
+                return prevCount + 1;
+              });
+              break;
+            case "instagram":
+              setInsta((prevCount) => prevCount + 1);
+              break;
+            case "facebook":
+              setFacebook((prevCount) => prevCount + 1);
+              break;
+            default:
+              break;
           }
-          if (item.salesChannel === "facebook") {
-            setFacebook(facebook + 1);
-          }
+
+          seenIds.add(item._id); // Mark this ID as seen
         });
-        //   console.log(Customers);
+
         setData(Customers.data || []);
       }
       setIsLoading(false);

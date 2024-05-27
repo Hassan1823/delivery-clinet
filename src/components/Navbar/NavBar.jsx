@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/images/logo.png";
 import { useAuthContext } from "../../context/AuthContext";
+import { adminLink } from "../../../lib/data";
 
 export const NavBar = () => {
   const { logoutHandler, isLogged } = useAuthContext();
+  const [admin, setAdmin] = useState(false);
+  const [userData, setUserData] = useState([]);
 
   const handleLogout = async () => {
     try {
@@ -13,6 +16,21 @@ export const NavBar = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (!userData || userData.length === 0) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        setUserData(user);
+        if (user.role === "admin") {
+          setAdmin(true);
+        } else {
+          setAdmin(false);
+        }
+      }
+    }
+  }, [userData]);
+
   return (
     <div className="navbar bg-[#E5E5E5] px-[4%]">
       <div className="navbar-start">
@@ -109,7 +127,7 @@ export const NavBar = () => {
         {isLogged ? (
           <>
             <Link
-              to={"/dashboard"}
+              to={!admin ? "/dashboard" : `${adminLink}/${userData?._id}`}
               className="px-4 py-2 font-bold text-white bg-yellow-600 shadow-2xl"
             >
               Dashboard

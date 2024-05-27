@@ -23,13 +23,13 @@ export const Shipping = () => {
 
   const btnData = [
     "All",
-    "Ready to Sen",
+    "Ready to Send",
     "Prepare to send",
     "Get into the system",
-    "delivery",
-    "the customers recieve the items",
-    "return orign",
-    "cancel",
+    "Delivery",
+    "The customers receive the items",
+    "Return origin",
+    "Cancel",
   ];
 
   const fetchShippings = async () => {
@@ -150,15 +150,16 @@ export const Shipping = () => {
 
   useEffect(() => {
     // Define a mapping of button values to status strings
+
     const statusMapping = {
       All: undefined, // No filtering
-      "Ready to Sen": "ready",
-      "Prepare to send": "prepare",
-      "Get into the system": "system",
-      delivery: "delivery",
-      "the customers receive the items": "received",
-      "return origin": "return",
-      cancel: "cancel",
+      "Ready to Send": "Ready to Send",
+      "Prepare to send": "Prepare to send",
+      "Get into the system": "Get into the system",
+      Delivery: "Delivery",
+      "The customers receive the items": "The customers receive the items",
+      "Return origin": "Return origin",
+      Cancel: "Cancel",
     };
 
     // Get the status string from the mapping based on btnValue
@@ -197,7 +198,7 @@ export const Shipping = () => {
         );
 
         if (!response.ok) {
-          toast.error("Something went wrong");
+          // toast.error("Something went wrong");
           fetchShippings();
         } else {
           const res = await response.json();

@@ -52,6 +52,7 @@ export const Login = () => {
           toast.success("Login successful");
           if (user.data.role === "admin" || user.data.role === "Admin") {
             window.location.href = `${adminLink}/${user?.data._id}`;
+            localStorage.setItem("admin", JSON.stringify(user.data));
             return;
           }
           navigate("/dashboard");

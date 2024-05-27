@@ -36,6 +36,7 @@ export function AuthProvider({ children }) {
       }
 
       localStorage.removeItem("user");
+      localStorage.removeItem("admin");
       setUser(null);
       setIsLogged(false);
       toast.success("Logged out successfully");
