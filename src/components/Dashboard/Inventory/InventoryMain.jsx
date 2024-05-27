@@ -193,7 +193,7 @@ export const InventoryMain = () => {
         );
 
         if (!response.ok) {
-          toast.error("Something went wrong");
+          // toast.error("Something went wrong");
           fetchProducts();
         } else {
           const res = await response.json();
