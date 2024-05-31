@@ -157,7 +157,11 @@ export const AddProduct = ({ refresh, setLoading, loading }) => {
               name="csvFileA"
               id="csvFileA"
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              onChange={(e) => setFileA(e.target.files[0])}
+              onChange={(e) => {
+                setFileA(e.target.files[0]);
+                // Reset the input field's value
+                e.target.value = null;
+              }}
               // accept=".csv"
             />
             <span>Upload Products</span>

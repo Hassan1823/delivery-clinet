@@ -87,7 +87,7 @@ export const Shipping = () => {
     doc.text(`Brand : ${data.brand}`, 10, 110);
     doc.text(`Customer : ${data.customer.name}`, 10, 120);
     doc.text(`Phone : ${data.customer.phone}`, 10, 130);
-    doc.text(`Shipping Cost : ${data.totalPrice}`, 10, 140);
+    doc.text(`Shipping Cost : ${data.shippingCost}`, 10, 140);
     doc.text(`Quantity : ${data.quantity}`, 10, 150);
     doc.text(`Weight : ${data.totalWeight / 1000} kg`, 10, 160);
     doc.text(`Shipping : ${data.brand}`, 10, 170);
@@ -128,7 +128,7 @@ export const Shipping = () => {
           (shipping) =>
             `${new Date(shipping.createdAt).toLocaleString()},${
               shipping.customer.name
-            },${shipping.customer.phone},${shipping.totalPrice},${
+            },${shipping.customer.phone},${shipping.shippingCost},${
               shipping.quantity
             },${shipping.totalWeight / 1000} kg,${shipping.brand},${
               shipping._id

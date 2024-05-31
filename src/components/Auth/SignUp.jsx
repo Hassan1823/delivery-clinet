@@ -63,14 +63,14 @@ export const SignUp = () => {
         const errorMessage =
           responseData.message || `Server error: ${response.status}`;
         throw new Error(errorMessage);
+      } else {
+        console.log("Signup successful:", responseData);
+
+        navigate("/confirmotp");
+        toast.success("Signup successful");
+        reset();
       }
-
-      console.log("Signup successful:", responseData);
-
-      navigate("/confirmotp");
-      toast.success("Signup successful");
       setIsLoading(false);
-      reset();
     } catch (error) {
       console.error("Error during signup:", error.message);
       toast.error(`${error.message}`);
